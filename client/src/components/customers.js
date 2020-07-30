@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import './customers.css';
+import Profile from './Profile'
 
 class Customers extends Component {
   constructor() {
     super();
     this.state = {
-      customers: []
+      customers: [],
+      currentUser: null
     };
   }
 
@@ -16,14 +18,18 @@ class Customers extends Component {
   }
 
   render() {
+    const { currentUser, customers } = this.state
     return (
       <div>
-        <h2>Customers</h2>
+      <div onClick={()=>{this.setState({currentUser: null})}}> &#x2190; Back</div>
+      {currentUser  ? <Profile user={currentUser} customers={customers}/> :
+        <div><h2>Customers</h2>
         <ul>
         {this.state.customers.map(customer => 
-          <li key={customer.id}>{customer.firstName} {customer.lastName}</li>
+          <li className="customer-buttons" key={customer.id} onClick={() => {this.setState({currentUser: customer})}}>{customer.firstName} {customer.lastName} </li>
         )}
         </ul>
+        </div>}
       </div>
     );
   }

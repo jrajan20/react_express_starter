@@ -1,0 +1,28 @@
+
+.accounts-container{
+	display: flex;
+	justify-content: center;
+}
+.accounts-list{
+	
+	width: fit-content;
+}
+
+.account-card{
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+  font-size:1.2rem;
+  width: 400px;
+  height: 64px;
+  padding: 12px;
+  border: 1px solid #414141;
+  border-radius: 25px;
+  margin-bottom: 32px;
+  cursor: pointer;
+}
+
+.account-type{
+	font-weight: bold;
+}
+

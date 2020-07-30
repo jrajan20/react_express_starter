@@ -1,3 +1,7 @@
+h2{
+	text-align: center;
+}
+
 ul {
   padding:0;
   list-style:none;
@@ -5,8 +9,13 @@ ul {
   margin:auto;
 }
 
-li{
+.customer-buttons{
+	text-align: center;
   font-size:1.2rem;
   line-height: 2rem;
-  border-bottom: 1px dotted #777;
+  border: 1px solid #414141;
+  border-radius: 25px;
+  font-weight: bold;
+  margin-bottom: 24px;
+  cursor: pointer;
 }
