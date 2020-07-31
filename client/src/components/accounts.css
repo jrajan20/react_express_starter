@@ -41,3 +41,25 @@
 .account-type {
 	font-weight: bold;
 }
+
+.action-card {
+	width: 400px;
+	padding: 16px;
+	border: 1px solid black;
+}
+
+.amount-input {
+	padding: 4px;
+	font-size: 16px;
+	margin-right: 24px;
+}
+
+.confirm-button {
+	background-color: #128dff;
+	color: #ffffff;
+	width: 100px;
+	height: 32px;
+	border: none;
+	border-radius: 25px;
+	font-weight: bold;
+}
