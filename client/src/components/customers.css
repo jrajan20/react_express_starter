@@ -1,21 +1,27 @@
-h2{
-	text-align: center;
+h2 {
+  text-align: center;
 }
 
 ul {
-  padding:0;
-  list-style:none;
+  padding: 0;
+  list-style: none;
   width: 30%;
-  margin:auto;
+  margin: auto;
 }
 
-.customer-buttons{
-	text-align: center;
-  font-size:1.2rem;
+.customer-buttons {
+  text-align: center;
+  font-size: 1.2rem;
   line-height: 2rem;
   border: 1px solid #414141;
   border-radius: 25px;
   font-weight: bold;
   margin-bottom: 24px;
   cursor: pointer;
+}
+
+.back-button {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0 0 0 32px;
 }

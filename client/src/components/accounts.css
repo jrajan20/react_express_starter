@@ -1,28 +1,43 @@
+.account-title {
+	font-size: 24px;
+	font-family: Arial, Hevetica, sans-serif;
+	text-align: center;
+	font-weight: bold;
+	margin-bottom: 32px;
+}
 
-.accounts-container{
+.account-info {
+	width: fit-content;
+	margin: auto;
+	border: 1px solid black;
+	border-radius: 25px;
+	padding: 24px;
+}
+
+.accounts-container {
 	display: flex;
 	justify-content: center;
 }
-.accounts-list{
-	
-	width: fit-content;
+.accounts-list {
+	display: flex;
+	flex-direction: column;
+	width: 600px;
 }
 
-.account-card{
+.account-card {
 	display: flex;
 	justify-content: space-between;
 	align-items: baseline;
-  font-size:1.2rem;
-  width: 400px;
-  height: 64px;
-  padding: 12px;
-  border: 1px solid #414141;
-  border-radius: 25px;
-  margin-bottom: 32px;
-  cursor: pointer;
+	font-size: 1.2rem;
+
+	height: 64px;
+	padding: 12px;
+	border: 1px solid #414141;
+	border-radius: 25px;
+	margin-bottom: 32px;
+	cursor: pointer;
 }
 
-.account-type{
+.account-type {
 	font-weight: bold;
 }
-
