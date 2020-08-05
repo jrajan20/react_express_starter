@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./customers.css";
 import Profile from "./Profile";
+import _ from "lodash";
 import axios from "axios";
 
 class Customers extends Component {
@@ -13,24 +14,33 @@ class Customers extends Component {
   }
 
   componentDidMount() {
-    fetch("/api/customers")
-      .then((res) => res.json())
-      .then((customers) =>
-        this.setState({ customers }, () =>
-          console.log("Customers fetched...", customers)
-        )
-      );
+    // fetch("/api/customers")
+    //   .then((res) => res.json())
+    //   .then((customers) =>
+    //     this.setState({ customers }, () =>
+    //       console.log("Customers fetched...", customers)
+    //     )
+    //   );
+    this.getCustomers();
   }
 
-  updateCustomers = (customers) => {
-    fetch("/api/update", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(customers),
-    }).then((result) => {
-      console.log(result);
+  getCustomers = async () => {
+    let customers = await fetch("/api/customers").then((res) => res.json());
+    this.setState({ customers: customers }, () =>
+      console.log("Customers fetched...", customers)
+    );
+  };
+
+  updateCustomers = async (customers) => {
+    let update = await axios
+      .post("http://localhost:5000/api/customers", customers)
+      .then((response) => {
+        console.log(response);
+      });
+    console.log(update);
+    this.getCustomers();
+    let currentUserProfile = _.find(customers, (customer) => {
+      return customer.id === this.state.currentUser.id;
     });
   };
 
