@@ -19,12 +19,18 @@ class Profile extends Component {
   };
 
   render() {
-    const { user, customers, back } = this.props;
+    const { user, customers, back, updateCustomers } = this.props;
     const { currentAccount } = this.state;
 
     return currentAccount ? (
       <div>
-        <Account account={currentAccount} back={this.goBack} />
+        <Account
+          account={currentAccount}
+          back={this.goBack}
+          customers={customers}
+          user={user}
+          updateCustomers={updateCustomers}
+        />
       </div>
     ) : (
       <div>
@@ -53,10 +59,20 @@ class Profile extends Component {
                     <div className="account-type">CHEQUING</div>
                     <div>{account.number}</div>
                   </div>
-                  <div>{`$${account.balance} CAD`}</div>
+                  <div>{`$${Number(account.balance).toFixed(2)} CAD`}</div>
                 </div>
               ))}
             </div>
+            {user.alerts.length > 0 ? (
+              <div className="alerts-list">
+                <div className="alert-title">Alerts:</div>
+                <ul className="alert-messages">
+                  {user.alerts.map((alert) => (
+                    <li>{alert}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./customers.css";
 import Profile from "./Profile";
+import axios from "axios";
 
 class Customers extends Component {
   constructor() {
@@ -21,6 +22,18 @@ class Customers extends Component {
       );
   }
 
+  updateCustomers = (customers) => {
+    fetch("/api/update", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(customers),
+    }).then((result) => {
+      console.log(result);
+    });
+  };
+
   goBack = () => {
     this.setState({ currentUser: null });
   };
@@ -35,6 +48,7 @@ class Customers extends Component {
               user={currentUser}
               customers={customers}
               back={this.goBack}
+              updateCustomers={this.updateCustomers}
             />
           </div>
         ) : (

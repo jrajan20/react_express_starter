@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./accounts.css";
+import _ from "lodash";
 
 class Account extends Component {
   constructor() {
@@ -12,8 +13,28 @@ class Account extends Component {
       wCurrency: null,
       dCurrency: null,
       tCurrency: null,
+      transferUser: null,
     };
   }
+
+  clearState = () => {
+    this.setState({
+      withdrawal: null,
+      deposit: null,
+      transfer: null,
+      transferAcc: null,
+      wCurrency: null,
+      dCurrency: null,
+      tCurrency: null,
+      transferUser: null,
+    });
+
+    this.inputWithdraw.value = "";
+    this.inputDeposit.value = "";
+    this.inputTransferAcc.value = "";
+    this.inputTransferUser.value = "";
+    this.inputTransfer.value = "";
+  };
 
   handleWithdrawCurrency = (evt) => {
     this.setState({ wCurrency: evt.target.value });
@@ -27,8 +48,263 @@ class Account extends Component {
     this.setState({ tCurrency: evt.target.value });
   };
 
+  currencyExchange = (currency, amount) => {
+    let moneyValue = _.ceil(Number(amount), 2);
+
+    switch (currency) {
+      case "CAD":
+        return moneyValue;
+      case "USD":
+        return moneyValue * 2;
+      case "MXN":
+        return moneyValue / 10;
+    }
+  };
+
+  handleWithdrawal = () => {
+    const { withdrawal, wCurrency } = this.state;
+    const { account, customers, user, updateCustomers } = this.props;
+    let date = new Date().toLocaleString();
+    let accountUpdate = { ...account };
+
+    if (account.users.includes(user.id)) {
+      let newBalance = _.ceil(
+        Number(account.balance) - this.currencyExchange(wCurrency, withdrawal),
+        2
+      );
+      accountUpdate.balance = newBalance;
+      accountUpdate.transactionHistory.push({
+        date: date,
+        transactionType: "withdrawal",
+        amount: this.currencyExchange(wCurrency, withdrawal),
+        newBalance: newBalance,
+      });
+
+      let updatedAccounts = user.accounts.map((account) => {
+        if (account.number === accountUpdate.number) {
+          return (account = accountUpdate);
+        }
+      });
+
+      let userUpdate = customers.map((customer) => {
+        if (user.id === customer.id) {
+          return { ...customer, accounts: updatedAccounts };
+        } else {
+          return customer;
+        }
+      });
+
+      updateCustomers(userUpdate);
+
+      this.clearState();
+    } else {
+      let alertMessage = `Unauthorized user attempted to withdraw money from your account, Account Number: ${account.number}`;
+      let alertsUpdate = customers.map((customer) => {
+        if (account.users.includes(customer.id)) {
+          return { ...customer, alerts: customer.alerts.concat(alertMessage) };
+        } else {
+          return customer;
+        }
+      });
+
+      alert("Not authorized to make this action!");
+
+      console.log(alertsUpdate);
+      this.clearState();
+    }
+  };
+
+  handleDeposit = () => {
+    const { deposit, dCurrency } = this.state;
+    const { account, customers, user, updateCustomers } = this.props;
+    let date = new Date().toLocaleString();
+    let accountUpdate = { ...account };
+
+    if (account.users.includes(user.id)) {
+      let newBalance = _.ceil(
+        Number(account.balance) + this.currencyExchange(dCurrency, deposit),
+        2
+      );
+
+      accountUpdate.balance = newBalance;
+      accountUpdate.transactionHistory.push({
+        date: date,
+        transactionType: "deposit",
+        amount: this.currencyExchange(dCurrency, deposit),
+        newBalance: newBalance,
+      });
+
+      let updatedAccounts = user.accounts.map((account) => {
+        if (account.number === accountUpdate.number) {
+          return (account = accountUpdate);
+        }
+      });
+
+      let userUpdate = customers.map((customer) => {
+        if (user.id === customer.id) {
+          return { ...customer, accounts: updatedAccounts };
+        } else {
+          return customer;
+        }
+      });
+
+      updateCustomers(userUpdate);
+      this.clearState();
+    } else {
+      let alertMessage = `Unauthorized user attempted to access your account, Account Number: ${account.number}`;
+      let alertsUpdate = customers.map((customer) => {
+        if (account.users.includes(customer.id)) {
+          return { ...customer, alerts: customer.alerts.concat(alertMessage) };
+        } else {
+          return customer;
+        }
+      });
+
+      alert("Not authorized to make this action!");
+
+      console.log(alertsUpdate);
+      this.clearState();
+    }
+  };
+
+  handleTransfer = () => {
+    const { transfer, tCurrency, transferAcc, transferUser } = this.state;
+    const { account, customers, user, updateCustomers } = this.props;
+    let date = new Date().toLocaleString();
+    let accountUpdate = { ...account };
+    let transferCustomer = _.find(customers, (customer) => {
+      return customer.id === transferUser;
+    });
+    console.log(transferCustomer);
+
+    let transferAccUpdate = _.find(transferCustomer.accounts, (account) => {
+      return account.number === transferAcc;
+    });
+
+    console.log(transferAccUpdate);
+
+    if (transferAccUpdate) {
+      if (account.users.includes(user.id)) {
+        let newBalance = _.ceil(
+          Number(account.balance) - this.currencyExchange(tCurrency, transfer),
+          2
+        );
+        let newTransferBalance = _.ceil(
+          Number(transferAccUpdate.balance) +
+            this.currencyExchange(tCurrency, transfer),
+          2
+        );
+
+        accountUpdate.balance = newBalance;
+        accountUpdate.transactionHistory.push({
+          date: date,
+          transactionType: "transfer",
+          amount: this.currencyExchange(tCurrency, transfer),
+          newBalance: newBalance,
+          transferAccountNumber: transferAcc,
+          transferUser: transferCustomer,
+        });
+
+        transferAccUpdate.balance = newTransferBalance;
+        transferAccUpdate.transactionHistory.push({
+          date: date,
+          transactionType: "recieved",
+          amount: this.currencyExchange(tCurrency, transfer),
+          newBalance: newTransferBalance,
+          transferFromAcc: account.number,
+          transferFromUser: user,
+        });
+
+        let updatedAccounts = user.accounts.map((acc) => {
+          if (acc.number === accountUpdate.number) {
+            return (acc = accountUpdate);
+          }
+        });
+
+        let updatedTransferAccounts = transferCustomer.accounts.map((acc) => {
+          if (acc.number === transferAccUpdate.number) {
+            return (acc = transferAccUpdate);
+          }
+        });
+
+        let userUpdate = customers.map((customer) => {
+          if (user.id === customer.id) {
+            return { ...customer, accounts: updatedAccounts };
+          } else {
+            return customer;
+          }
+        });
+
+        let transferUserUpdate = userUpdate.map((customer) => {
+          if (transferUser === customer.id) {
+            return { ...customer, accounts: updatedTransferAccounts };
+          } else {
+            return customer;
+          }
+        });
+
+        console.log(transferUserUpdate);
+        updateCustomers(transferUserUpdate);
+        this.clearState();
+      } else {
+        let alertMessage = `Unauthorized user attempted to transfer from your account, Account Number: ${account.number}`;
+        let alertsUpdate = customers.map((customer) => {
+          if (account.users.includes(customer.id)) {
+            return {
+              ...customer,
+              alerts: customer.alerts.concat(alertMessage),
+            };
+          } else {
+            return customer;
+          }
+        });
+
+        alert("Not authorized to make this action");
+        this.clearState();
+
+        console.log(alertsUpdate);
+      }
+    } else {
+      alert("Enter a valid User ID and Account Number to transfer");
+      this.clearState();
+    }
+  };
+
+  transactionLogFormat = (type, history) => {
+    switch (type) {
+      case "withdrawal":
+        return `Withdrew $${Number(history.amount).toFixed(
+          2
+        )}| Closing Balance: $${Number(history.newBalance).toFixed(2)}| ${
+          history.date
+        }`;
+      case "deposit":
+        return `Deposited $${Number(history.amount).toFixed(
+          2
+        )}| Closing Balance: $${Number(history.newBalance).toFixed(2)}| ${
+          history.date
+        }`;
+      case "transfer":
+        return `Transferred $${Number(history.amount).toFixed(2)} to ${
+          history.transferUser.firstName
+        } ${history.transferUser.lasttName}, account #: ${
+          history.transferAccountNumber
+        }| Closing Balance: $${Number(history.newBalance).toFixed(2)}| ${
+          history.date
+        }`;
+      case "recieved":
+        return `Recieved $${Number(history.amount).toFixed(2)} from ${
+          history.transferFromUser.firstName
+        } ${history.transferFromUser.lasttName}, account #: ${
+          history.transferFromAcc
+        }| Closing Balance: $${Number(history.newBalance).toFixed(2)}| ${
+          history.date
+        }`;
+    }
+  };
+
   render() {
-    const { account, back } = this.props;
+    const { account, back, customers, user, updateCustomers } = this.props;
     const {
       withdrawal,
       deposit,
@@ -37,6 +313,7 @@ class Account extends Component {
       dCurrency,
       tCurrency,
       transferAcc,
+      transferUser,
     } = this.state;
 
     return (
@@ -51,8 +328,10 @@ class Account extends Component {
           &#x2190; Back
         </div>
         <div className="account-info">
-          <div className="account-title">{`Account Number: ${account.number}`}</div>
-
+          <div className="account-title">{`User: ${user.firstName} ${user.lastName}, Account Number: ${account.number} `}</div>
+          <div className="account-title">{`Balance: $${Number(
+            account.balance
+          ).toFixed(2)} CAD`}</div>
           <div className="action-card">
             <div className="action-title">Withdraw:</div>
             <div>
@@ -61,6 +340,7 @@ class Account extends Component {
                 <input
                   className="amount-input"
                   type="number"
+                  ref={(el) => (this.inputWithdraw = el)}
                   onChange={(e) => {
                     this.setState({ withdrawal: e.target.value });
                   }}
@@ -69,6 +349,7 @@ class Account extends Component {
               <button
                 className="confirm-button"
                 disabled={!wCurrency || !withdrawal}
+                onClick={this.handleWithdrawal}
               >
                 Confirm
               </button>
@@ -117,6 +398,7 @@ class Account extends Component {
                 <input
                   className="amount-input"
                   type="number"
+                  ref={(el) => (this.inputDeposit = el)}
                   onChange={(e) => {
                     this.setState({ deposit: e.target.value });
                   }}
@@ -124,7 +406,8 @@ class Account extends Component {
               </label>
               <button
                 className="confirm-button"
-                disabled={!dCurrency || deposit}
+                disabled={!dCurrency || !deposit}
+                onClick={this.handleDeposit}
               >
                 Confirm
               </button>
@@ -169,20 +452,34 @@ class Account extends Component {
             <div className="action-title">Transfer:</div>
             <div>
               <label>
+                <p>To User (ID): </p>
+                <input
+                  className="amount-input"
+                  type="number"
+                  ref={(el) => (this.inputTransferUser = el)}
+                  onChange={(e) => {
+                    this.setState({ transferUser: e.target.value });
+                  }}
+                />
+              </label>
+              <label>
                 <p>To Account #:</p>
                 <input
                   className="amount-input"
                   type="number"
+                  ref={(el) => (this.inputTransferAcc = el)}
                   onChange={(e) => {
                     this.setState({ transferAcc: e.target.value });
                   }}
                 />
               </label>
+
               <label>
                 <p>Amount:</p>${" "}
                 <input
                   className="amount-input"
                   type="number"
+                  ref={(el) => (this.inputTransfer = el)}
                   onChange={(e) => {
                     this.setState({ transfer: e.target.value });
                   }}
@@ -191,7 +488,10 @@ class Account extends Component {
 
               <button
                 className="confirm-button"
-                disabled={!tCurrency || !transferAcc || !transfer}
+                disabled={
+                  !tCurrency || !transferAcc || !transfer || !transferUser
+                }
+                onClick={this.handleTransfer}
               >
                 Confirm
               </button>
@@ -234,7 +534,15 @@ class Account extends Component {
           </div>
 
           <div className="action-title">Transaction History</div>
-          <div className="history-box"></div>
+          <div className="history-box">
+            {account.transactionHistory.length > 0
+              ? account.transactionHistory.map((entry) => (
+                  <li>
+                    {this.transactionLogFormat(entry.transactionType, entry)}
+                  </li>
+                ))
+              : null}
+          </div>
         </div>
       </div>
     );
