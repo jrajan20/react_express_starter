@@ -9,9 +9,6 @@
 .account-info {
 	width: fit-content;
 	margin: auto;
-	border: 1px solid black;
-	border-radius: 25px;
-	padding: 24px;
 }
 
 .accounts-container {
@@ -43,9 +40,18 @@
 }
 
 .action-card {
-	width: 400px;
+	width: 600px;
 	padding: 16px;
 	border: 1px solid black;
+	margin-bottom: 32px;
+}
+
+.action-title {
+	font-size: 20px;
+	font-family: Arial, Hevetica, sans-serif;
+
+	font-weight: bold;
+	margin-bottom: 16px;
 }
 
 .amount-input {
@@ -62,4 +68,26 @@
 	border: none;
 	border-radius: 25px;
 	font-weight: bold;
+	cursor: pointer;
+}
+
+.confirm-button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.history-box {
+	width: 600px;
+	padding: 16px;
+	height: 200px;
+	overflow: auto;
+	border: 1px solid black;
+	margin-bottom: 32px;
+}
+
+.currency-selection {
+	display: flex;
+	justify-content: space-between;
+	width: 200px;
+	margin: 16px 0 0 0;
 }
