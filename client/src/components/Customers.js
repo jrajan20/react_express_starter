@@ -10,6 +10,7 @@ class Customers extends Component {
     this.state = {
       customers: [],
       currentUser: null,
+      currentAccount: null,
     };
   }
 
@@ -31,17 +32,30 @@ class Customers extends Component {
     );
   };
 
+  //used to post to express and update state with changed customers data
   updateCustomers = async (customers) => {
     let update = await axios
       .post("http://localhost:5000/api/customers", customers)
       .then((response) => {
         console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
       });
-    console.log(update);
     this.getCustomers();
+
     let currentUserProfile = _.find(customers, (customer) => {
       return customer.id === this.state.currentUser.id;
     });
+
+    console.log(customers);
+    console.log(currentUserProfile);
+    this.setState({ currentUser: currentUserProfile });
+  };
+
+  //selected account is updated so user can instantaneously view balance changes
+  updateCurrentAccount = (account) => {
+    this.setState({ currentAccount: account });
   };
 
   goBack = () => {
@@ -49,7 +63,7 @@ class Customers extends Component {
   };
 
   render() {
-    const { currentUser, customers } = this.state;
+    const { currentUser, customers, currentAccount } = this.state;
     return (
       <div>
         {currentUser ? (
@@ -59,6 +73,8 @@ class Customers extends Component {
               customers={customers}
               back={this.goBack}
               updateCustomers={this.updateCustomers}
+              updateCurrentAccount={this.updateCurrentAccount}
+              currentAccount={currentAccount}
             />
           </div>
         ) : (

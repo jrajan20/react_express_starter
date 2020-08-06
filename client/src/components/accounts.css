@@ -78,11 +78,14 @@
 
 .history-box {
 	width: 600px;
-	padding: 16px;
+	padding: 12px;
 	height: 200px;
 	overflow: auto;
 	border: 1px solid black;
 	margin-bottom: 32px;
+	line-height: 1.5;
+	font-family: Arial, Hevetica, sans-serif;
+	background-color: #deeaee;
 }
 
 .currency-selection {

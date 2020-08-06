@@ -1,10 +1,20 @@
-.bank-app-header{
+.app {
+	height: 100vh;
+}
+.bank-app-header {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-
+	font-family: Arial, Hevetica, sans-serif;
+	background-color: #414141;
+	margin-bottom: 32px;
 }
-
-.app-logo{
-
+.bank-title {
+	text-align: center;
+	color: #ffffff;
+	padding: 32px;
+}
+.app-logo {
+	width: 150px;
+	height: 100px;
 }

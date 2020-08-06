@@ -2,25 +2,31 @@ import React, { Component } from "react";
 import Account from "./Account";
 import "./customers.css";
 import "./accounts.css";
+import _ from "lodash";
 
 class Profile extends Component {
   constructor() {
     super();
     this.state = {
       accountInfo: {},
-      currentAccount: null,
     };
   }
 
   componentDidMount() {}
 
   goBack = () => {
-    this.setState({ currentAccount: null });
+    this.props.updateCurrentAccount(null);
   };
 
   render() {
-    const { user, customers, back, updateCustomers } = this.props;
-    const { currentAccount } = this.state;
+    const {
+      user,
+      customers,
+      back,
+      updateCustomers,
+      updateCurrentAccount,
+      currentAccount,
+    } = this.props;
 
     return currentAccount ? (
       <div>
@@ -30,6 +36,7 @@ class Profile extends Component {
           customers={customers}
           user={user}
           updateCustomers={updateCustomers}
+          updateCurrentAccount={updateCurrentAccount}
         />
       </div>
     ) : (
@@ -52,7 +59,7 @@ class Profile extends Component {
                 <div
                   className="account-card"
                   onClick={() => {
-                    this.setState({ currentAccount: account });
+                    updateCurrentAccount(account);
                   }}
                 >
                   <div>
@@ -63,17 +70,17 @@ class Profile extends Component {
                 </div>
               ))}
             </div>
-            {user.alerts.length > 0 ? (
-              <div className="alerts-list">
-                <div className="alert-title">Alerts:</div>
-                <ul className="alert-messages">
-                  {user.alerts.map((alert) => (
-                    <li>{alert}</li>
-                  ))}
-                </ul>
-              </div>
-            ) : null}
           </div>
+          {user.alerts.length > 0 ? (
+            <div className="alerts-list">
+              <div className="alert-title">Alerts:</div>
+              <div className="alert-messages">
+                {user.alerts.map((alert) => (
+                  <li>{alert}</li>
+                ))}
+              </div>
+            </div>
+          ) : null}
         </div>
       </div>
     );
