@@ -66,7 +66,10 @@ class Profile extends Component {
                     <div className="account-type">CHEQUING</div>
                     <div>{account.number}</div>
                   </div>
-                  <div>{`$${Number(account.balance).toFixed(2)} CAD`}</div>
+                  <div>{`${Number(account.balance).toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  })} CAD`}</div>
                 </div>
               ))}
             </div>

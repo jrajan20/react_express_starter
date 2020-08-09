@@ -315,37 +315,48 @@ class Account extends Component {
     }
   };
 
+  changeCurrencyFormat = (number) => {
+    return number.toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD",
+    });
+  };
+
   //transaction history format based on type
   transactionLogFormat = (type, history) => {
     switch (type) {
       case "withdrawal":
-        return `Withdrew $${Number(history.amount).toFixed(
-          2
-        )} | Closing Balance: $${Number(history.newBalance).toFixed(2)} | ${
-          history.date
-        }`;
+        return `Withdrew ${this.changeCurrencyFormat(
+          Number(history.amount)
+        )} | Closing Balance: ${this.changeCurrencyFormat(
+          Number(history.newBalance)
+        )} | ${history.date}`;
       case "deposit":
-        return `Deposited $${Number(history.amount).toFixed(
-          2
-        )} | Closing Balance: $${Number(history.newBalance).toFixed(2)} | ${
-          history.date
-        }`;
+        return `Deposited ${this.changeCurrencyFormat(
+          Number(history.amount)
+        )} | Closing Balance: ${this.changeCurrencyFormat(
+          Number(history.newBalance)
+        )} | ${history.date}`;
       case "transfer":
-        return `Transferred $${Number(history.amount).toFixed(2)} to ${
-          history.transferUser.firstName
-        } ${history.transferUser.lastName}, account #: ${
+        return `Transferred ${this.changeCurrencyFormat(
+          Number(history.amount)
+        )} to ${history.transferUser.firstName} ${
+          history.transferUser.lastName
+        }, account #: ${
           history.transferAccountNumber
-        } | Closing Balance: $${Number(history.newBalance).toFixed(2)} | ${
-          history.date
-        }`;
+        } | Closing Balance: ${this.changeCurrencyFormat(
+          Number(history.newBalance)
+        )} | ${history.date}`;
       case "recieved":
-        return `Recieved $${Number(history.amount).toFixed(2)} from ${
-          history.transferFromUser.firstName
-        } ${history.transferFromUser.lasttName}, account #: ${
+        return `Recieved ${this.changeCurrencyFormat(
+          Number(history.amount)
+        )} from ${history.transferFromUser.firstName} ${
+          history.transferFromUser.lasttName
+        }, account #: ${
           history.transferFromAcc
-        } | Closing Balance: $${Number(history.newBalance).toFixed(2)} | ${
-          history.date
-        }`;
+        } | Closing Balance: ${this.changeCurrencyFormat(
+          Number(history.newBalance)
+        )} | ${history.date}`;
     }
   };
 
@@ -382,9 +393,12 @@ class Account extends Component {
         </div>
         <div className="account-info">
           <div className="account-title">{`User: ${user.firstName} ${user.lastName}, Account Number: ${account.number} `}</div>
-          <div className="account-title">{`Balance: $${Number(
+          <div className="account-title">{`Balance: ${Number(
             account.balance
-          ).toFixed(2)} CAD`}</div>
+          ).toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+          })} CAD`}</div>
           <div className="action-card">
             <div className="action-title">Withdraw:</div>
             <div>
