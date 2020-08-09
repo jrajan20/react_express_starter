@@ -17,7 +17,7 @@ let updatedCustomers = null;
 
 app.get("/api/customers", (req, res) => {
 	if (updatedCustomers) {
-		res.send(updatedCustomers);
+		res.json(updatedCustomers);
 	} else {
 		let customers = [
 			{
@@ -111,14 +111,14 @@ app.get("/api/customers", (req, res) => {
 				alerts: [],
 			},
 		];
-		res.send(customers);
+		res.json(customers);
 	}
 });
 
 app.post("/api/customers", (req, res) => {
 	updatedCustomers = req.body;
 	console.log(updatedCustomers);
-	res.send(updatedCustomers);
+	res.json(updatedCustomers);
 });
 
 const port = 5000;

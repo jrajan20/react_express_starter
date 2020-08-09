@@ -1,14 +1,10 @@
-# React Express Starter Pack
+# World Bank App
 
-> Create full stack apps with React and Express. Run your client and server with a single command. 
-
-### Redux Version
-This version does not include Redux
-[Click Here For Redux Version](https://github.com/bradtraversy/react_redux_express_starter) 
+> A banking App that simulates banking interactions such as withdrawing, depositing, and transferring different currencies, with customers.
 
 ## Quick Start
 
-``` bash
+```bash
 # Install dependencies for server
 npm install
 
@@ -27,17 +23,20 @@ npm run client
 # Server runs on http://localhost:5000 and client on http://localhost:3000
 ```
 
+## Server Dependencies
+
+    axios: "^0.19.2",
+    babel": "^6.23.0",
+    concurrently: "^3.5.1",
+    cors: "^2.8.5",
+    express: "^4.16.2"
+
+## Client Dependencies
+
+    react: "^16.2.0",
+    react-dom: "^16.2.0",
+    react-scripts: "1.0.17"
+
 ## App Info
 
-### Author
-
-Brad Traversy
-[Traversy Media](http://www.traversymedia.com)
-
-### Version
-
-1.0.0
-
-### License
-
-This project is licensed under the MIT License
+> Made using react_express_starter by Brad Traversy: https://github.com/bradtraversy/react_express_starter
