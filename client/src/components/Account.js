@@ -90,6 +90,8 @@ class Account extends Component {
       let updatedAccounts = user.accounts.map((account) => {
         if (account.number === accountUpdate.number) {
           return (account = accountUpdate);
+        } else {
+          return account;
         }
       });
       //updating customers array
@@ -152,6 +154,8 @@ class Account extends Component {
       let updatedAccounts = user.accounts.map((account) => {
         if (account.number === accountUpdate.number) {
           return (account = accountUpdate);
+        } else {
+          return account;
         }
       });
       //updating customers array
@@ -251,12 +255,16 @@ class Account extends Component {
         let updatedAccounts = user.accounts.map((acc) => {
           if (acc.number === accountUpdate.number) {
             return (acc = accountUpdate);
+          } else {
+            return acc;
           }
         });
 
         let updatedTransferAccounts = transferCustomer.accounts.map((acc) => {
           if (acc.number === transferAccUpdate.number) {
             return (acc = transferAccUpdate);
+          } else {
+            return acc;
           }
         });
         //update customers with user's transfer and recieve scenario

@@ -26,7 +26,9 @@ class Customers extends Component {
   }
 
   getCustomers = async () => {
-    let customers = await fetch("/api/customers").then((res) => res.json());
+    let customers = await fetch("/api/customers")
+      .then((res) => res.json())
+      .catch((err) => console.log(err));
     this.setState({ customers: customers }, () =>
       console.log("Customers fetched...", customers)
     );

@@ -10,12 +10,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "jest",
+    "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:5000",
-  "devDependencies": {
-    "@babel/preset-react": "^7.10.4",
-    "jest": "^26.2.2"
-  }
+  "proxy": "http://localhost:5000"
 }
